@@ -23,11 +23,11 @@ const counterMax = Object.keys(validValues).length;
 
 fastify.get("/", async (req, res) => {
 	// Increment the counter
+	const [condition, valuesSet] = validValues[counter].split("-");
 	counter++;
 	if (counter >= counterMax) {
 		counter = 0;
 	}
-	const [condition, valuesSet] = validValues[counter].split("-");
 
 	return {
 		counter,
