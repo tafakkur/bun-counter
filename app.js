@@ -30,9 +30,9 @@ fastify.get("/", async (req, res) => {
 	const [condition, valuesSet] = validValues[counter].split("-");
 
 	return {
-		counter: valuesSet,
+		counter,
 		condition: condition,
-		valuesSet: counter,
+		valuesSet,
 		dataSet: {
 			X: xData[valuesSet],
 			C: cData[valuesSet]
