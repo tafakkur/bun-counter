@@ -3,9 +3,9 @@ const fastify = require("fastify")({ logger: false });
 // Initialize a counter variable
 let counter = 0;
 
-const xFile = await Bun.file("./files/x.json").text();
-const cFile = await Bun.file("./files/c.json").text();
-const excludeFile = await Bun.file("./files/exclude.json").text();
+const xFile = await Bun.file("/files/x.json").text();
+const cFile = await Bun.file("/files/c.json").text();
+const excludeFile = await Bun.file("/files/exclude.json").text();
 
 const xData = JSON.parse(xFile);
 const cData = JSON.parse(cFile);
