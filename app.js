@@ -45,7 +45,7 @@ fastify.get("/reset", async () => {
 	counter = -1;
 	return {
 		counter,
-		message: "Counter has been reset to 0"
+		message: "Counter has been reset."
 	};
 });
 
@@ -70,10 +70,10 @@ fastify.get("/set/:value", async (req, res) => {
 		});
 		return;
 	}
-	if (value > counterMax) {
+	if (value >= counterMax) {
 		res.code(400).send({
 			error: "Value out of range",
-			message: `Please provide a value between 1 and ${counterMax}. Example: /set/42`
+			message: `Please provide a value between 1 and ${counterMax - 1}. Example: /set/42`
 		});
 		return;
 	}
