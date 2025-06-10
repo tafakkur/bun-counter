@@ -3,26 +3,39 @@ const fastify = require("fastify")({ logger: false });
 // Initialize a counter variable
 let counter = 0;
 
-const xFile = await Bun.file("/files/x.json").text();
-const cFile = await Bun.file("/files/c.json").text();
+const xFile = await Bun.file("./files/x.json").text();
+const cFile = await Bun.file("./files/c.json").text();
+const excludeFile = await Bun.file("./files/exclude.json").text();
 
 const xData = JSON.parse(xFile);
 const cData = JSON.parse(cFile);
+const excludeData = JSON.parse(excludeFile);
 
-const counterMax = Object.keys(xData).length;
+const allValues = Object.keys(cData)
+	.map((key) => {
+		return [["A", key].join("-"), ["B", key].join("-")];
+	})
+	.flat();
+
+const validValues = allValues.filter((value) => !excludeData.includes(value));
+
+const counterMax = Object.keys(validValues).length;
 
 fastify.get("/", async (req, res) => {
 	// Increment the counter
 	counter++;
-	if (counter > counterMax) {
-		counter = 1; // Reset to 1 if it exceeds the max count
+	if (counter >= counterMax) {
+		counter = 0;
 	}
-	// Send the new counter value as a JSON response
+	const [condition, valuesSet] = validValues[counter].split("-");
+
 	return {
-		counter: counter,
+		counter: valuesSet,
+		condition: condition,
+		valuesSet: counter,
 		dataSet: {
-			X: xData[counter],
-			C: cData[counter]
+			X: xData[valuesSet],
+			C: cData[valuesSet]
 		}
 	};
 });
