@@ -21,7 +21,7 @@ const validValues = allValues.filter((value) => !excludeData.includes(value));
 
 const counterMax = Object.keys(validValues).length;
 
-fastify.get("/", async (req, res) => {
+fastify.get("/", async () => {
 	// Increment the counter
 	counter++;
 	if (counter >= counterMax || counter < 0) {
@@ -32,7 +32,7 @@ fastify.get("/", async (req, res) => {
 
 	return {
 		counter,
-		condition: condition,
+		condition,
 		valuesSet,
 		dataSet: {
 			X: xData[valuesSet],
@@ -41,7 +41,7 @@ fastify.get("/", async (req, res) => {
 	};
 });
 
-fastify.get("/reset", async (req, res) => {
+fastify.get("/reset", async () => {
 	counter = -1;
 	return {
 		counter,
@@ -49,14 +49,14 @@ fastify.get("/reset", async (req, res) => {
 	};
 });
 
-fastify.get("/current", async (req, res) => {
+fastify.get("/current", async () => {
 	return {
 		counter,
 		message: `Current counter value is ${counter}`
 	};
 });
 
-fastify.get("/websurge-allow.txt", async (req, res) => {
+fastify.get("/websurge-allow.txt", async () => {
 	res.code(200).send();
 });
 
