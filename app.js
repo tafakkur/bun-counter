@@ -1,7 +1,7 @@
 const fastify = require("fastify")({ logger: false });
 
 // Initialize a counter variable
-let counter = 0;
+let counter = -1;
 
 const xFile = await Bun.file("/files/x.json").text();
 const cFile = await Bun.file("/files/c.json").text();
@@ -23,11 +23,12 @@ const counterMax = Object.keys(validValues).length;
 
 fastify.get("/", async (req, res) => {
 	// Increment the counter
-	const [condition, valuesSet] = validValues[counter].split("-");
 	counter++;
 	if (counter >= counterMax) {
 		counter = 0;
 	}
+
+	const [condition, valuesSet] = validValues[counter].split("-");
 
 	return {
 		counter,
@@ -69,7 +70,7 @@ fastify.get("/set/:value", async (req, res) => {
 		});
 		return;
 	}
-	if (value < 0 || value > counterMax) {
+	if (value > counterMax) {
 		res.code(400).send({
 			error: "Value out of range",
 			message: `Please provide a value between 1 and ${counterMax}. Example: /set/42`
@@ -77,10 +78,11 @@ fastify.get("/set/:value", async (req, res) => {
 		return;
 	}
 
-	counter = value;
+	counter = value <= 0 ? 0 : value;
 	return {
-		counter: counter,
-		message: `Counter has been set to ${counter}`
+		counter,
+		message: `Counter has been set to ${counter}`,
+		counterMax
 	};
 });
 
