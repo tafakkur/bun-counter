@@ -24,7 +24,7 @@ const counterMax = Object.keys(validValues).length;
 fastify.get("/", async (req, res) => {
 	// Increment the counter
 	counter++;
-	if (counter >= counterMax) {
+	if (counter >= counterMax || counter < 0) {
 		counter = 0;
 	}
 
@@ -42,16 +42,16 @@ fastify.get("/", async (req, res) => {
 });
 
 fastify.get("/reset", async (req, res) => {
-	counter = 0;
+	counter = -1;
 	return {
-		counter: counter,
+		counter,
 		message: "Counter has been reset to 0"
 	};
 });
 
 fastify.get("/current", async (req, res) => {
 	return {
-		counter: counter,
+		counter,
 		message: `Current counter value is ${counter}`
 	};
 });
@@ -78,7 +78,7 @@ fastify.get("/set/:value", async (req, res) => {
 		return;
 	}
 
-	counter = value <= 0 ? 0 : value;
+	counter = value < 0 ? -1 : value;
 	return {
 		counter,
 		message: `Counter has been set to ${counter}`,
