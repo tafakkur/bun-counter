@@ -69,7 +69,7 @@ fastify.get("/set/:value", async (req, res) => {
 		});
 		return;
 	}
-	if (value < 1 || value > counterMax) {
+	if (value < 0 || value > counterMax) {
 		res.code(400).send({
 			error: "Value out of range",
 			message: `Please provide a value between 1 and ${counterMax}. Example: /set/42`
